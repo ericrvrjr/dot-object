@@ -538,9 +538,13 @@ DotObject.prototype.dot = function (obj, tgt, path) {
         }
       } else {
         if (isArray && this.useBrackets) {
-          tgt[path.join(this.separator).concat('[' + key + ']')] = obj[key]
+          tgt[path.join(this.separator).concat('[' + key + ']')] = obj[key].map(item=>this.dot(item))
         } else {
-          tgt[path.concat(index).join(this.separator)] = obj[key]
+          if(Array.isArray(obj[key])){
+            tgt[path.concat(index).join(this.separator)] = obj[key].map(item=>this.dot(item))
+          }else{
+            tgt[path.concat(index).join(this.separator)] = obj[key]
+          }
         }
       }
     }.bind(this)
